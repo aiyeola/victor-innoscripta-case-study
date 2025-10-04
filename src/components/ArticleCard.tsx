@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { format } from 'date-fns';
-import type { Article } from '@/types/article';
-import { NEWS_SOURCES } from '@/types/article';
+import { useState, useMemo } from "react";
+import { format } from "date-fns";
+import DOMPurify from "dompurify";
+import type { Article } from "@/types/article";
+import { NEWS_SOURCES } from "@/types/article";
 
 interface ArticleCardProps {
   article: Article;
@@ -9,9 +10,18 @@ interface ArticleCardProps {
 
 export function ArticleCard({ article }: ArticleCardProps) {
   const [imageError, setImageError] = useState(false);
-  const formattedDate = format(new Date(article.publishedAt), 'MMM dd, yyyy');
+  const formattedDate = format(new Date(article.publishedAt), "MMM dd, yyyy");
 
   const showPlaceholder = !article.imageUrl || imageError;
+
+  // Sanitize HTML content to prevent XSS attacks
+  const sanitizedDescription = useMemo(() => {
+    if (!article.description) return "";
+    return DOMPurify.sanitize(article.description, {
+      ALLOWED_TAGS: ["b", "i", "em", "strong", "a", "p", "br"],
+      ALLOWED_ATTR: ["href", "target", "rel"],
+    });
+  }, [article.description]);
 
   return (
     <article className="bg-card border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col">
@@ -34,7 +44,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
           </div>
         ) : (
           <img
-            src={article.imageUrl || ''}
+            src={article.imageUrl || ""}
             alt={article.title}
             className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
             loading="lazy"
@@ -59,15 +69,16 @@ export function ArticleCard({ article }: ArticleCardProps) {
           {article.title}
         </h3>
 
-        {article.description && (
-          <p className="text-sm text-muted-foreground line-clamp-3 mb-3">
-            {article.description}
-          </p>
+        {sanitizedDescription && (
+          <p
+            className="text-sm text-muted-foreground line-clamp-3 mb-3"
+            dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+          />
         )}
 
         <div className="mt-auto space-y-3">
           <div className="flex justify-between items-center text-xs text-muted-foreground">
-            <span>{article.author || 'Unknown Author'}</span>
+            <span>{article.author || "Unknown Author"}</span>
             <time dateTime={article.publishedAt}>{formattedDate}</time>
           </div>
 
