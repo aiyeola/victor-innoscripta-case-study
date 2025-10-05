@@ -23,4 +23,7 @@ export default defineConfig([
       "@typescript-eslint/no-explicit-any": "off",
     },
   },
+  {
+    ignores: ["**/node_modules/**", "**/dist/**", "**/coverage/**"],
+  },
 ]);

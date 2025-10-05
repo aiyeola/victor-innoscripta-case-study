@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "verbatimModuleSyntax": false,
+    "allowImportingTsExtensions": false,
+    "types": ["vite/client", "@testing-library/jest-dom", "jest", "node"]
+  },
+  "include": [
+    "src/**/__tests__/**/*",
+    "src/**/__mocks__/**/*",
+    "src/setupTests.ts"
+  ],
+  "exclude": []
+}

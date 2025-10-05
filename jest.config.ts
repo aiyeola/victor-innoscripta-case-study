@@ -1,8 +1,8 @@
 import type { Config } from 'jest';
 import { TextEncoder, TextDecoder } from 'util';
 
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder as any;
+global.TextEncoder = TextEncoder as typeof global.TextEncoder;
+global.TextDecoder = TextDecoder as typeof global.TextDecoder;
 
 const config: Config = {
   preset: 'ts-jest',
@@ -48,8 +48,8 @@ const config: Config = {
         },
         esModuleInterop: true,
         target: 'ES2022',
-        module: 'ESNext',
-        moduleResolution: 'node',
+        module: 'ES2022',
+        moduleResolution: 'bundler',
         isolatedModules: false,
         skipLibCheck: true,
         skipDefaultLibCheck: true,
@@ -60,6 +60,7 @@ const config: Config = {
       tsconfig: {
         allowJs: true,
         esModuleInterop: true,
+        module: 'ES2022',
       },
     }],
   },

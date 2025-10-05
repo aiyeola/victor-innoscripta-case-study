@@ -15,24 +15,29 @@ Object.defineProperty(globalThis, 'import.meta', {
 });
 
 // Mock API service modules that use import.meta
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const mockServices = require('./__mocks__/news-services.mock');
+
 jest.mock('@/services/api/newsapi.service', () => ({
-  newsAPIService: require('./__mocks__/news-services.mock').newsAPIService,
+  newsAPIService: mockServices.newsAPIService,
 }));
 jest.mock('@/services/api/guardian.service', () => ({
-  guardianService: require('./__mocks__/news-services.mock').guardianService,
+  guardianService: mockServices.guardianService,
 }));
 jest.mock('@/services/api/nytimes.service', () => ({
-  nyTimesService: require('./__mocks__/news-services.mock').nyTimesService,
+  nyTimesService: mockServices.nyTimesService,
 }));
 
 // Polyfill TextEncoder/TextDecoder for Node.js environment
 if (typeof globalThis.TextEncoder === 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const util = require('util');
   Object.assign(globalThis, { TextEncoder: util.TextEncoder, TextDecoder: util.TextDecoder });
 }
 
 // Polyfill TransformStream for Node.js environment
 if (typeof globalThis.TransformStream === 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { TransformStream } = require('node:stream/web');
   Object.assign(globalThis, { TransformStream });
 }
@@ -41,11 +46,11 @@ if (typeof globalThis.TransformStream === 'undefined') {
 if (typeof globalThis.BroadcastChannel === 'undefined') {
   class BroadcastChannelMock {
     constructor(public name: string) {}
-    postMessage(_message: any) {}
+    postMessage() {}
     close() {}
-    addEventListener(_type: string, _listener: any) {}
-    removeEventListener(_type: string, _listener: any) {}
-    dispatchEvent(_event: Event): boolean { return true; }
+    addEventListener() {}
+    removeEventListener() {}
+    dispatchEvent(): boolean { return true; }
   }
   Object.assign(globalThis, { BroadcastChannel: BroadcastChannelMock });
 }
