@@ -45,7 +45,10 @@ if (typeof globalThis.TransformStream === 'undefined') {
 // Polyfill BroadcastChannel for Node.js environment
 if (typeof globalThis.BroadcastChannel === 'undefined') {
   class BroadcastChannelMock {
-    constructor(public name: string) {}
+    name: string;
+    constructor(name: string) {
+      this.name = name;
+    }
     postMessage() {}
     close() {}
     addEventListener() {}
