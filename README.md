@@ -5,12 +5,14 @@ A modern, responsive news aggregation application built with React, TypeScript, 
 ## Features
 
 ### Core Functionality
+
 - **Article Search & Filtering**: Search articles by keyword and filter by date, category, and source
 - **Personalized News Feed**: Customize your feed by selecting preferred sources, categories, and authors
 - **Mobile-Responsive Design**: Optimized for viewing on all device sizes
 - **Multiple News Sources**: Aggregates news from NewsAPI, The Guardian, and The New York Times
 
 ### Technical Features
+
 - **TypeScript**: Fully typed for better developer experience and code quality
 - **React Query**: Efficient data fetching with caching and background updates
 - **TailwindCSS v4**: Modern utility-first CSS framework with custom theming
@@ -53,6 +55,7 @@ VITE_NEW_YORK_TIMES_API_KEY=your_nytimes_key
 ```
 
 **Note**: The provided API keys are for development purposes. For production use, obtain your own API keys from:
+
 - [NewsAPI](https://newsapi.org/)
 - [The Guardian](https://open-platform.theguardian.com/)
 - [The New York Times](https://developer.nytimes.com/)
@@ -79,7 +82,25 @@ npm run preview
 
 ## Running with Docker
 
+### Prerequisites
+
+Make sure you have a `.env` file in the project root with your API keys. You can copy the example file:
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` and add your actual API keys:
+
+```env
+VITE_NEWS_API_KEY=your_newsapi_key_here
+VITE_GUARDIAN_API_KEY=your_guardian_api_key_here
+VITE_NEW_YORK_TIMES_API_KEY=your_nytimes_api_key_here
+```
+
 ### Build and Run with Docker Compose
+
+The `docker-compose.yml` file is configured to automatically read environment variables from your `.env` file:
 
 ```bash
 docker-compose up --build
@@ -89,8 +110,24 @@ The application will be available at `http://localhost:3000`
 
 ### Build Docker Image Manually
 
+If you prefer to build the Docker image manually, you need to pass the environment variables as build arguments:
+
 ```bash
-docker build -t news-aggregator .
+docker build \
+  --build-arg VITE_NEWS_API_KEY=your_newsapi_key \
+  --build-arg VITE_GUARDIAN_API_KEY=your_guardian_key \
+  --build-arg VITE_NEW_YORK_TIMES_API_KEY=your_nytimes_key \
+  -t news-aggregator .
+```
+
+Or you can source them from your `.env` file:
+
+```bash
+export $(cat .env | xargs) && docker build \
+  --build-arg VITE_NEWS_API_KEY=$VITE_NEWS_API_KEY \
+  --build-arg VITE_GUARDIAN_API_KEY=$VITE_GUARDIAN_API_KEY \
+  --build-arg VITE_NEW_YORK_TIMES_API_KEY=$VITE_NEW_YORK_TIMES_API_KEY \
+  -t news-aggregator .
 ```
 
 ### Run Docker Container
@@ -192,6 +229,7 @@ src/
 ### Search & Filtering
 
 The search functionality uses debouncing to minimize API calls. Filters can be applied for:
+
 - Date range (from/to)
 - News sources (NewsAPI, Guardian, NY Times)
 - Categories (business, entertainment, general, health, science, sports, technology)
@@ -199,6 +237,7 @@ The search functionality uses debouncing to minimize API calls. Filters can be a
 ### Personalized Feed
 
 Users can customize their news feed by:
+
 1. Clicking the "Preferences" button
 2. Selecting preferred news sources
 3. Choosing categories of interest
@@ -207,6 +246,7 @@ Users can customize their news feed by:
 ### Error Handling
 
 The application includes multiple layers of error handling:
+
 - **Error Boundaries**: Catch React component errors
 - **Try-Catch Blocks**: Handle API errors gracefully
 - **Fallback UI**: Display user-friendly error messages
@@ -215,6 +255,7 @@ The application includes multiple layers of error handling:
 ### Loading States
 
 Loading states are implemented throughout:
+
 - Skeleton loaders for article cards
 - Loading spinners for actions
 - Shimmer effects for smooth transitions
@@ -222,16 +263,19 @@ Loading states are implemented throughout:
 ## API Integration
 
 ### NewsAPI
+
 - Endpoint: `https://newsapi.org/v2/`
 - Features: Top headlines, everything search
 - Rate Limit: 100 requests/day (developer tier)
 
 ### The Guardian
+
 - Endpoint: `https://content.guardianapis.com/`
 - Features: Content search with fields
 - Rate Limit: 500 requests/day (developer tier)
 
 ### The New York Times
+
 - Endpoint: `https://api.nytimes.com/svc/`
 - Features: Article search, top stories
 - Rate Limit: 500 requests/day (developer tier)

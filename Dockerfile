@@ -14,6 +14,16 @@ RUN npm ci --only=production=false
 # Copy source code
 COPY . .
 
+# Accept build arguments for environment variables
+ARG VITE_NEWS_API_KEY
+ARG VITE_GUARDIAN_API_KEY
+ARG VITE_NEW_YORK_TIMES_API_KEY
+
+# Set environment variables for the build
+ENV VITE_NEWS_API_KEY=$VITE_NEWS_API_KEY
+ENV VITE_GUARDIAN_API_KEY=$VITE_GUARDIAN_API_KEY
+ENV VITE_NEW_YORK_TIMES_API_KEY=$VITE_NEW_YORK_TIMES_API_KEY
+
 # Build the application
 RUN npm run build
 

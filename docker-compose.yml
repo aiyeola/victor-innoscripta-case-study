@@ -5,6 +5,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - VITE_NEWS_API_KEY=${VITE_NEWS_API_KEY}
+        - VITE_GUARDIAN_API_KEY=${VITE_GUARDIAN_API_KEY}
+        - VITE_NEW_YORK_TIMES_API_KEY=${VITE_NEW_YORK_TIMES_API_KEY}
     container_name: news-aggregator
     ports:
       - "3000:80"
